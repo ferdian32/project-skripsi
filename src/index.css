@@ -1,1 +1,141 @@
 @import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f0f7ed;
+}
+.bg-games {
+  width: 100%;
+  height: 100vh;
+  background-image: url("/images/");
+}
+
+.game-container {
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 24px;
+  text-align: center;
+}
+
+.game-container h1 {
+  color: #285c3b;
+  margin-bottom: 10px;
+}
+
+.description {
+  color: #555;
+  line-height: 1.6;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-around;
+  margin: 24px 0;
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: bold;
+  color: #285c3b;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.animal-card {
+  aspect-ratio: 1 / 1;
+  border: none;
+  border-radius: 16px;
+  background: #398456;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+
+.animal-card:hover:not(:disabled) {
+  transform: translateY(-3px);
+}
+
+.animal-card.open {
+  background: white;
+  color: #285c3b;
+  border: 2px solid #398456;
+}
+
+.animal-card:disabled {
+  cursor: default;
+}
+
+.question-mark {
+  font-size: 42px;
+  font-weight: bold;
+}
+
+.animal-emoji {
+  font-size: 42px;
+}
+
+.animal-name {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.restart-button {
+  margin-top: 24px;
+  padding: 13px 22px;
+  border: none;
+  border-radius: 10px;
+  background: #285c3b;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.restart-button:hover {
+  background: #1c432b;
+}
+
+.win-message {
+  margin-top: 20px;
+  padding: 12px;
+  background: #d8efd8;
+  color: #285c3b;
+  border-radius: 12px;
+}
+
+@media (max-width: 480px) {
+  .game-container {
+    margin: 16px auto;
+    padding: 12px;
+  }
+
+  .card-grid {
+    gap: 8px;
+  }
+
+  .animal-emoji {
+    font-size: 30px;
+  }
+
+  .question-mark {
+    font-size: 32px;
+  }
+
+  .animal-name {
+    font-size: 11px;
+  }
+}

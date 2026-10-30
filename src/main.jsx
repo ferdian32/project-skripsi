@@ -17,7 +17,53 @@ import PerawatanDashboard from "./pages/admin/Perawatan.jsx";
 import EditDataPerawatan from "./pages/admin/CRUD/EditDataPerawatan.jsx";
 import SpesiesDashboard from "./pages/admin/Spesies.jsx";
 import EditDataSpesies from "./pages/admin/CRUD/EditDataSpesies.jsx";
+import MemoryCard from "./pages/MemoryCardGames.jsx";
+import AnimalQuiz from "./pages/Quiz.jsx";
+import HomePage from "./pages/Home.jsx";
+import SpesiesPage from "./pages/Spesies.jsx";
+import PendidikanPage from "./pages/Education.jsx";
+import PerawatanPage from "./pages/Perawatan.jsx";
+import HobiPage from "./pages/Habitat.jsx";
+import HabitatPage from "./pages/Habitat.jsx";
+import GamesPage from "./pages/Games.jsx";
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+  {
+    path: "/games",
+    element: <GamesPage />,
+  },
+  {
+    path: "/category",
+    children: [
+      {
+        path: "spesies",
+        element: <SpesiesPage />,
+      },
+      {
+        path: "education",
+        element: <PendidikanPage />,
+      },
+      {
+        path: "perawatan",
+        element: <PerawatanPage />,
+      },
+      {
+        path: "habitat",
+        element: <HabitatPage />,
+      },
+    ],
+  },
+  {
+    path: "/quiz",
+    element: <AnimalQuiz />,
+  },
+  {
+    path: "/memory-card",
+    element: <MemoryCard />,
+  },
   {
     path: "/dashboard",
     element: <DashboardPage />,
