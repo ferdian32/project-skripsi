@@ -5,7 +5,7 @@ import { GlobalProvider } from "../../../context/GlobalProvider";
 
 const ModalAddDataQuiz = () => {
   const { activeCloseIcon } = useContext(GlobalProvider);
-    
+
   const [formData, setFormData] = useState({
     question: "",
     answer: "",

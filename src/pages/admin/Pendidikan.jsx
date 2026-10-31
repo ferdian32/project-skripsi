@@ -130,7 +130,7 @@ const PendidikanDashboard = () => {
 
                   <td className="px-4 py-3">{pendidikan.category || "-"}</td>
 
-                  <td className="grid grid-cols-2 gap-x-3 place-items-center py-4 px-4">
+                  <td className="flex flex-col items-center justify-center gap-x-3 py-4 px-4">
                     <button
                       className="bg-yellow-400 text-slate-50 py-2 px-4"
                       onClick={() =>
@@ -143,7 +143,7 @@ const PendidikanDashboard = () => {
                     </button>
 
                     <button
-                      className="bg-red-500 text-slate-50 py-2 px-4"
+                      className="bg-red-500 text-slate-50 py-2 px-4 mt-2 cursor-pointer"
                       onClick={() =>
                         deleteDataPendidikan(pendidikan.id_pendidikan)
                       }

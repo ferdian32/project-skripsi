@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import HeaderComponent from "../components/Header";
-
+import { Link } from "react-router-dom";
+import createSlug from "../utils/Slug";
 const SpesiesPage = () => {
   const [spesies, setSpesies] = useState([]);
   const [search, setSearch] = useState("");
@@ -135,7 +136,9 @@ const SpesiesPage = () => {
                     {/* Card Content */}
                     <div className="px-4 py-4">
                       <h2 className="mb-3 wrap-break-words text-xl font-bold leading-snug text-gray-900">
-                        {item.title || item.nama_spesies}
+                        <Link to={`/detail/${createSlug(item.title)}`}>
+                          {item.title || item.nama_spesies}
+                        </Link>
                       </h2>
 
                       <p className="mb-3 text-sm text-gray-400">

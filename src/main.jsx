@@ -26,6 +26,10 @@ import PerawatanPage from "./pages/Perawatan.jsx";
 import HobiPage from "./pages/Habitat.jsx";
 import HabitatPage from "./pages/Habitat.jsx";
 import GamesPage from "./pages/Games.jsx";
+import MiniGames from "./pages/MiniGames.jsx";
+import MemoryCardDashboard from "./pages/admin/Quiz.jsx";
+import EditDataMemoryCard from "./pages/admin/CRUD/EditDataMemoryCard.jsx";
+import DetailPage from "./pages/Detail.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -34,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "/games",
     element: <GamesPage />,
+  },
+  {
+    path: "/mini-games",
+    element: <MiniGames />,
   },
   {
     path: "/category",
@@ -65,6 +73,10 @@ const router = createBrowserRouter([
     element: <MemoryCard />,
   },
   {
+    path: "detail/:slug",
+    element: <DetailPage />,
+  },
+  {
     path: "/dashboard",
     element: <DashboardPage />,
     children: [
@@ -78,6 +90,15 @@ const router = createBrowserRouter([
       {
         path: "quiz/:id_quiz",
         element: <EditDataQuiz />,
+      },
+
+      {
+        path: "memory-card",
+        element: <MemoryCardDashboard />,
+      },
+      {
+        path: "memory-card/:id_card",
+        element: <EditDataMemoryCard />,
       },
       {
         path: "article",

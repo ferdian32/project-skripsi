@@ -101,9 +101,9 @@ const ArticleDashboard = () => {
                   </td>
 
                   <td className=" px-4 py-3">{article.category}</td>
-                  <td className="grid grid-cols-2 gap-x-3 place-items-center py-4  px-4">
+                  <td className=" gap-x-3 flex flex-col items-center justify-center py-4  px-4">
                     <button
-                      className="bg-yellow-400 text-slate-50 py-2 px-4"
+                      className="bg-yellow-400 text-slate-50 py-2  px-4"
                       onClick={() =>
                         navigate(`/dashboard/article/${article.id_article}`)
                       }
@@ -111,7 +111,7 @@ const ArticleDashboard = () => {
                       Edit
                     </button>
                     <button
-                      className="bg-red-500 text-slate-50 py-2 px-4"
+                      className="bg-red-500 text-slate-50 py-2 px-4 mt-2 cursor-pointer"
                       onClick={() => deleteDataArticle(article.id_article)}
                     >
                       Delete

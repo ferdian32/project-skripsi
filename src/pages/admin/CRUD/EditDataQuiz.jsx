@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -22,9 +21,7 @@ export default function EditDataQuiz() {
   useEffect(() => {
     const getDataQuiz = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/quiz/${id_quiz}`
-        );
+        const response = await fetch(`http://localhost:3000/quiz/${id_quiz}`);
 
         if (!response.ok) {
           throw new Error("Data quiz tidak ditemukan");
@@ -42,9 +39,7 @@ export default function EditDataQuiz() {
 
         // Menampilkan gambar lama
         if (data.image) {
-          setPreviewImage(
-            `http://localhost:3000/uploads/${data.image}`
-          );
+          setPreviewImage(`http://localhost:3000/uploads/${data.image}`);
         }
       } catch (error) {
         console.error("Gagal mengambil data quiz:", error);
@@ -114,20 +109,15 @@ export default function EditDataQuiz() {
         formData.append("image", imageFile);
       }
 
-      const response = await fetch(
-        `http://localhost:3000/quiz/${id_quiz}`,
-        {
-          method: "PATCH",
-          body: formData,
-        }
-      );
+      const response = await fetch(`http://localhost:3000/quiz/${id_quiz}`, {
+        method: "PATCH",
+        body: formData,
+      });
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          result.message || "Gagal mengedit quiz"
-        );
+        throw new Error(result.message || "Gagal mengedit quiz");
       }
 
       alert("Quiz berhasil diperbarui!");
@@ -146,9 +136,7 @@ export default function EditDataQuiz() {
 
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-5">
-        Edit Quiz
-      </h1>
+      <h1 className="text-2xl font-bold mb-5">Edit Quiz</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -206,8 +194,7 @@ export default function EditDataQuiz() {
             className="w-full border rounded-md p-2"
           />
           <p className="text-sm text-gray-500 mt-1">
-            Pilih gambar baru jika ingin mengganti gambar lama.
-            Maksimal 5 MB.
+            Pilih gambar baru jika ingin mengganti gambar lama. Maksimal 5 MB.
           </p>
         </div>
 
