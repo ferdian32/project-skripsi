@@ -30,10 +30,20 @@ import MiniGames from "./pages/MiniGames.jsx";
 import MemoryCardDashboard from "./pages/admin/Quiz.jsx";
 import EditDataMemoryCard from "./pages/admin/CRUD/EditDataMemoryCard.jsx";
 import DetailPage from "./pages/Detail.jsx";
+import LoginAdmin from "./pages/Login.jsx";
+import RegisterAdmin from "./pages/Register.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+  },
+  {
+    path: "/admin/login",
+    element: <LoginAdmin></LoginAdmin>,
+  },
+  {
+    path: "/admin/register",
+    element: <RegisterAdmin />,
   },
   {
     path: "/games",

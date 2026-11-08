@@ -1,7 +1,7 @@
-
 import { useState, useEffect } from "react";
 import HeaderComponent from "../components/Header";
-
+import { Link } from "react-router-dom";
+import createSlug from "../utils/Slug";
 const PerawatanPage = () => {
   const [perawatan, setPerawatan] = useState([]);
   const [search, setSearch] = useState("");
@@ -32,9 +32,7 @@ const PerawatanPage = () => {
   const categories = [
     "Semua",
     ...new Set(
-      perawatan
-        .map((item) => item.category || item.kategori)
-        .filter(Boolean)
+      perawatan.map((item) => item.category || item.kategori).filter(Boolean),
     ),
   ];
 
@@ -43,9 +41,7 @@ const PerawatanPage = () => {
     const title = item.title || item.judul || "";
     const category = item.category || item.kategori || "";
 
-    const matchSearch = title
-      .toLowerCase()
-      .includes(search.toLowerCase());
+    const matchSearch = title.toLowerCase().includes(search.toLowerCase());
 
     const matchCategory =
       selectedCategory === "Semua" || category === selectedCategory;
@@ -59,10 +55,8 @@ const PerawatanPage = () => {
 
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-
           {/* SIDEBAR */}
           <aside className="lg:col-span-3">
-
             {/* Search */}
             <div className="mb-6 overflow-hidden rounded-md border border-gray-200 shadow-sm">
               <div className="bg-purple-800 px-5 py-4">
@@ -142,7 +136,9 @@ const PerawatanPage = () => {
                     {/* Card Content */}
                     <div className="px-4 py-4">
                       <h2 className="mb-3 wrap-break-words text-xl font-bold leading-snug text-gray-900">
-                        {item.title || item.judul}
+                        <Link to={`/detail/${createSlug(item.title)}`}>
+                          {item.title || item.nama_spesies}
+                        </Link>
                       </h2>
 
                       <p className="mb-3 text-sm text-gray-400">

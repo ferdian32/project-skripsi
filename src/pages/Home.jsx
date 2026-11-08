@@ -42,7 +42,7 @@ const HomePage = () => {
       <div className="relative flex min-h-137.5 md:min-h-150 items-center justify-center overflow-hidden px-4">
         {/* Background Image */}
         <img
-          src="/images/forest-home.jpg"
+          src="/images/bg-games.png"
           alt="Hewan di habitat alam"
           className="absolute inset-0 h-full w-full object-cover"
         />

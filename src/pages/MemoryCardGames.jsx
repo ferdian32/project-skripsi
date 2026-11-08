@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 
 export default function MemoryCard() {
@@ -6,6 +5,8 @@ export default function MemoryCard() {
   const [animals, setAnimals] = useState([]);
   const [opened, setOpened] = useState([]);
   const [matched, setMatched] = useState([]);
+  const [mismatchCards, setMismatchCards] = useState([]);
+  const [feedback, setFeedback] = useState("");
   const [moves, setMoves] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -14,9 +15,7 @@ export default function MemoryCard() {
   useEffect(() => {
     const getDataMemoryCard = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/memory-card"
-        );
+        const response = await fetch("http://localhost:3000/memory-card");
 
         if (!response.ok) {
           throw new Error(`HTTP Error: ${response.status}`);
@@ -24,9 +23,7 @@ export default function MemoryCard() {
 
         const results = await response.json();
 
-        const data = Array.isArray(results)
-          ? results
-          : results.data;
+        const data = Array.isArray(results) ? results : results.data;
 
         if (!Array.isArray(data)) {
           throw new Error("Format data API tidak valid.");
@@ -71,25 +68,30 @@ export default function MemoryCard() {
     if (newOpened.length === 2) {
       setMoves((previous) => previous + 1);
 
-      const firstCard = cards.find(
-        (item) => item.cardId === newOpened[0]
-      );
+      const firstCard = cards.find((item) => item.cardId === newOpened[0]);
 
-      const secondCard = cards.find(
-        (item) => item.cardId === newOpened[1]
-      );
+      const secondCard = cards.find((item) => item.cardId === newOpened[1]);
 
-      // Cocokkan berdasarkan ID hewan
+      // Jika pasangan cocok
       if (firstCard.id_card === secondCard.id_card) {
-        setMatched((previous) => [
-          ...previous,
-          firstCard.id_card,
-        ]);
+        setFeedback("match");
+
+        setMatched((previous) => [...previous, firstCard.id_card]);
 
         setOpened([]);
+
+        setTimeout(() => {
+          setFeedback("");
+        }, 800);
       } else {
+        // Jika pasangan tidak cocok
+        setFeedback("mismatch");
+        setMismatchCards(newOpened);
+
         setTimeout(() => {
           setOpened([]);
+          setMismatchCards([]);
+          setFeedback("");
         }, 800);
       }
     }
@@ -100,33 +102,40 @@ export default function MemoryCard() {
     setCards(createCards(animals));
     setOpened([]);
     setMatched([]);
+    setMismatchCards([]);
+    setFeedback("");
     setMoves(0);
   }
 
   // Status permainan
-  const finished =
-    animals.length > 0 &&
-    matched.length === animals.length;
+  const finished = animals.length > 0 && matched.length === animals.length;
 
+  // Loading
   if (loading) {
     return (
       <main className="game-container">
+        <div className="loading-animation">🐼</div>
         <p>Memuat kartu hewan...</p>
       </main>
     );
   }
 
+  // Error
   if (error) {
     return (
       <main className="game-container">
         <p>Gagal memuat kartu: {error}</p>
-        <button onClick={() => window.location.reload()}>
+        <button
+          className="restart-button"
+          onClick={() => window.location.reload()}
+        >
           Coba Lagi
         </button>
       </main>
     );
   }
 
+  // Data kosong
   if (animals.length === 0) {
     return (
       <main className="game-container">
@@ -135,6 +144,63 @@ export default function MemoryCard() {
     );
   }
 
+  // Halaman hasil akhir
+  if (finished) {
+    return (
+      <main className="game-container result-page">
+        <div className="memory-result-card">
+          {/* Karakter kemenangan */}
+          <div className="memory-result-emoji">🐼🥳</div>
+
+          <h1 className="memory-result-title">LUAR BIASA!</h1>
+
+          <p className="memory-result-description">
+            Yeay! Kamu berhasil menemukan semua pasangan hewan!
+          </p>
+
+          {/* Statistik permainan */}
+          <div className="memory-result-stats">
+            <div className="memory-stat">
+              <span className="memory-stat-icon">🐾</span>
+              <h2>{matched.length}</h2>
+              <p>Pasangan</p>
+            </div>
+
+            <div className="memory-stat">
+              <span className="memory-stat-icon">🎯</span>
+              <h2>{moves}</h2>
+              <p>Percobaan</p>
+            </div>
+          </div>
+
+          <div className="memory-success-message">
+            🎉 Hebat! Ingatan kamu luar biasa!
+          </div>
+
+          <button className="restart-button" onClick={restartGame}>
+            🔄 Main Lagi
+          </button>
+
+          {/* Confetti */}
+          <div className="memory-confetti">
+            {["🎉", "✨", "⭐", "🎊", "🌟", "🎈"].map((emoji, index) => (
+              <span
+                key={index}
+                style={{
+                  left: `${10 + index * 15}%`,
+                  animationDelay: `${index * 0.2}s`,
+                }}
+              >
+                {emoji}
+              </span>
+            ))}
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Halaman permainan
   return (
     <main className="game-container">
       <h1>🐾 Memory Card Hewan</h1>
@@ -143,39 +209,68 @@ export default function MemoryCard() {
         Temukan dua kartu dengan gambar hewan yang sama!
       </p>
 
+      {/* Informasi permainan */}
       <div className="game-info">
         <p>
           Pasangan: {matched.length} / {animals.length}
         </p>
+
         <p>Percobaan: {moves}</p>
       </div>
 
+      {/* Feedback pasangan */}
+      {feedback && (
+        <div
+          className={`memory-feedback ${
+            feedback === "match" ? "feedback-success" : "feedback-failed"
+          }`}
+        >
+          <span className="feedback-emoji">
+            {feedback === "match" ? "🐼🥳" : "🐼😢"}
+          </span>
+
+          <h2>
+            {feedback === "match"
+              ? "Yeay! Pasangan Cocok!"
+              : "Yahh, Belum Cocok!"}
+          </h2>
+
+          <p>
+            {feedback === "match"
+              ? "Kamu hebat! Satu pasangan berhasil ditemukan!"
+              : "Jangan sedih, coba cari pasangan yang sama lagi!"}
+          </p>
+        </div>
+      )}
+
+      {/* Kartu Hewan */}
       <div className="card-grid">
         {cards.map((card) => {
           const isOpen =
-            opened.includes(card.cardId) ||
-            matched.includes(card.id_card);
+            opened.includes(card.cardId) || matched.includes(card.id_card);
+
+          const isMatched = matched.includes(card.id_card);
+
+          const isMismatch = mismatchCards.includes(card.cardId);
 
           return (
             <button
               key={card.cardId}
-              className={`animal-card ${isOpen ? "open" : ""}`}
+              className={`animal-card
+                ${isOpen ? "open" : ""}
+                ${isMatched ? "matched" : ""}
+                ${isMismatch ? "mismatch" : ""}
+              `}
               onClick={() => flipCard(card)}
               disabled={
-                matched.includes(card.id_card) ||
-                opened.includes(card.cardId) ||
-                opened.length === 2
+                isMatched || opened.includes(card.cardId) || opened.length === 2
               }
             >
               {isOpen ? (
                 <>
-                  <span className="animal-emoji">
-                    {card.emoji}
-                  </span>
+                  <span className="animal-emoji">{card.emoji}</span>
 
-                  <span className="animal-name">
-                    {card.name}
-                  </span>
+                  <span className="animal-name">{card.name}</span>
                 </>
               ) : (
                 <span className="question-mark">?</span>
@@ -185,17 +280,8 @@ export default function MemoryCard() {
         })}
       </div>
 
-      {finished && (
-        <div className="win-message">
-          <h2>🎉 Hebat! Semua pasangan ditemukan!</h2>
-          <p>Jumlah percobaan kamu: {moves}</p>
-        </div>
-      )}
-
-      <button
-        className="restart-button"
-        onClick={restartGame}
-      >
+      {/* Tombol ulangi */}
+      <button className="restart-button" onClick={restartGame}>
         🔄 Ulangi Permainan
       </button>
     </main>

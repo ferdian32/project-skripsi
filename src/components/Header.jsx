@@ -3,7 +3,9 @@ import { listMenuHeader } from "../utils/listMenuHeader";
 const HeaderComponent = () => {
   return (
     <nav className="flex items-center justify-between px-20 py-8 w-full">
-      <h1>Logo</h1>
+      <h1 className="text-lg text-red-500 font-semibold">
+        <Link to={"/"}>Animals</Link>
+      </h1>
       <ul className="flex gap-5">
         {listMenuHeader &&
           listMenuHeader.map((item, index) => {
