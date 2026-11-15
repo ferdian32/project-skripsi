@@ -47,7 +47,7 @@ const MiniGames = () => {
   ];
 
   return (
-    <main className="relative min-h-screen w-full overflow-hidden bg-linear-to-b from-sky-300 via-sky-100 to-green-300">
+    <main className="relative min-h-screen w-full overflow-hidden bg-linear-to-b from-sky-300 via-sky-100 to-green-300 ">
       {/* Background Decoration */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-green-400/50 blur-3xl" />

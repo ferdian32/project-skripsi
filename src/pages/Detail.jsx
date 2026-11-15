@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import HeaderComponent from "../components/Header";
+import FooterComponent from "../components/Footer";
 
 const API_URL = "http://localhost:3000";
 
@@ -130,6 +131,7 @@ const DetailPage = () => {
           </aside>
         </div>
       </main>
+      <FooterComponent></FooterComponent>
     </section>
   );
 };

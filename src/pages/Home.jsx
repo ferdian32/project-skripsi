@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import HeaderComponent from "../components/Header";
 import { GlobalProvider } from "../context/GlobalProvider";
-
+import FooterComponent from "../components/Footer";
 const HomePage = () => {
   const [search, setSearch] = useState("");
   const { article, setArticle } = useContext(GlobalProvider);
@@ -113,6 +113,7 @@ const HomePage = () => {
           ))}
         </div>
       </div>
+      <FooterComponent></FooterComponent>
     </section>
   );
 };

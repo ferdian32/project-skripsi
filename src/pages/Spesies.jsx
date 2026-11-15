@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import HeaderComponent from "../components/Header";
 import { Link } from "react-router-dom";
 import createSlug from "../utils/Slug";
+import FooterComponent from "../components/Footer";
 const SpesiesPage = () => {
   const [spesies, setSpesies] = useState([]);
   const [search, setSearch] = useState("");
@@ -166,6 +167,7 @@ const SpesiesPage = () => {
           </main>
         </div>
       </div>
+      <FooterComponent></FooterComponent>
     </section>
   );
 };

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import HeaderComponent from "../components/Header";
 import createSlug from "../utils/Slug";
 import { Link } from "react-router-dom";
+import FooterComponent from "../components/Footer";
 
 const PendidikanPage = () => {
   const [pendidikan, setPendidikan] = useState([]);
@@ -167,6 +168,7 @@ const PendidikanPage = () => {
           </main>
         </div>
       </div>
+      <FooterComponent></FooterComponent>
     </section>
   );
 };

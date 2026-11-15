@@ -116,9 +116,6 @@ export default function AnimalQuiz() {
     setScore(0);
     setFinished(false);
   }
-
-  // Halaman hasil akhir
-
   // Halaman hasil akhir
   if (finished) {
     const perfectScore = score === quizData.length * 10;

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import HeaderComponent from "../components/Header";
 import { Link } from "react-router-dom";
 import createSlug from "../utils/Slug";
+import FooterComponent from "../components/Footer";
 
 const HabitatPage = () => {
   const [habitat, setHabitat] = useState([]);
@@ -167,6 +168,7 @@ const HabitatPage = () => {
           </main>
         </div>
       </div>
+      <FooterComponent></FooterComponent>
     </section>
   );
 };

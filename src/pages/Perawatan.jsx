@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import HeaderComponent from "../components/Header";
 import { Link } from "react-router-dom";
 import createSlug from "../utils/Slug";
+import FooterComponent from "../components/Footer";
 const PerawatanPage = () => {
   const [perawatan, setPerawatan] = useState([]);
   const [search, setSearch] = useState("");
@@ -166,6 +167,7 @@ const PerawatanPage = () => {
           </main>
         </div>
       </div>
+      <FooterComponent></FooterComponent>
     </section>
   );
 };
