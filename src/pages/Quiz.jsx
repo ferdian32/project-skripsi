@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { Volume2, VolumeX } from "lucide-react";
 
 export default function AnimalQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -8,6 +9,47 @@ export default function AnimalQuiz() {
   const [quizData, setQuizData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Musik Background
+  const [sound, setSound] = useState(false);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    if (audio) {
+      audio.volume = 0.3;
+      audio.loop = true;
+
+      audio
+        .play()
+        .then(() => setSound(true))
+        .catch(() => setSound(false));
+    }
+
+    return () => {
+      if (audio) {
+        audio.pause();
+      }
+    };
+  }, []);
+
+  // Tombol ON/OFF Musik
+  const toggleSound = () => {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    if (sound) {
+      audio.pause();
+      setSound(false);
+    } else {
+      audio
+        .play()
+        .then(() => setSound(true))
+        .catch((error) => console.log(error));
+    }
+  };
 
   // Mengambil data kuis dari API
   useEffect(() => {
@@ -37,6 +79,57 @@ export default function AnimalQuiz() {
 
     getAllDataAnimal();
   }, []);
+
+  // Memilih jawaban
+  function handleAnswer(optionText) {
+    if (selectedAnswer !== null) return;
+
+    setSelectedAnswer(optionText);
+
+    if (isCorrectAnswer(optionText)) {
+      setScore((prevScore) => prevScore + 10);
+    }
+  }
+
+  // Mengambil teks jawaban
+  const getOptionText = (option) => {
+    return typeof option === "string" ? option : option.option_text;
+  };
+
+  // Normalisasi jawaban
+  const normalizeAnswer = (answer) => {
+    return String(answer ?? "")
+      .trim()
+      .toLowerCase();
+  };
+
+  // Memeriksa jawaban
+  const isCorrectAnswer = (optionText) => {
+    if (!quizData[currentQuestion]) return false;
+
+    return (
+      normalizeAnswer(optionText) ===
+      normalizeAnswer(quizData[currentQuestion].answer)
+    );
+  };
+
+  // Pertanyaan berikutnya
+  function handleNext() {
+    if (currentQuestion < quizData.length - 1) {
+      setCurrentQuestion((prev) => prev + 1);
+      setSelectedAnswer(null);
+    } else {
+      setFinished(true);
+    }
+  }
+
+  // Mengulang kuis
+  function handleRestart() {
+    setCurrentQuestion(0);
+    setSelectedAnswer(null);
+    setScore(0);
+    setFinished(false);
+  }
 
   // Loading
   if (loading) {
@@ -71,51 +164,6 @@ export default function AnimalQuiz() {
   const question = quizData[currentQuestion];
   const options = Array.isArray(question.options) ? question.options : [];
 
-  // Mengambil teks jawaban
-  const getOptionText = (option) => {
-    return typeof option === "string" ? option : option.option_text;
-  };
-
-  // Normalisasi jawaban
-  const normalizeAnswer = (answer) => {
-    return String(answer ?? "")
-      .trim()
-      .toLowerCase();
-  };
-
-  // Memeriksa jawaban
-  const isCorrectAnswer = (optionText) => {
-    return normalizeAnswer(optionText) === normalizeAnswer(question.answer);
-  };
-
-  // Memilih jawaban
-  function handleAnswer(optionText) {
-    if (selectedAnswer !== null) return;
-
-    setSelectedAnswer(optionText);
-
-    if (isCorrectAnswer(optionText)) {
-      setScore((prevScore) => prevScore + 10);
-    }
-  }
-
-  // Pertanyaan berikutnya
-  function handleNext() {
-    if (currentQuestion < quizData.length - 1) {
-      setCurrentQuestion((prev) => prev + 1);
-      setSelectedAnswer(null);
-    } else {
-      setFinished(true);
-    }
-  }
-
-  // Mengulang kuis
-  function handleRestart() {
-    setCurrentQuestion(0);
-    setSelectedAnswer(null);
-    setScore(0);
-    setFinished(false);
-  }
   // Halaman hasil akhir
   if (finished) {
     const perfectScore = score === quizData.length * 10;
@@ -124,6 +172,17 @@ export default function AnimalQuiz() {
 
     return (
       <div className="quiz-page flex min-h-screen items-center justify-center bg-green-50 p-6">
+        {/* Audio Background */}
+        <audio ref={audioRef} src="/sounds/bg-music.mp3" preload="auto" />
+
+        {/* Tombol Musik */}
+        <button
+          onClick={toggleSound}
+          className="fixed right-5 top-5 z-50 flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-slate-700 text-white shadow-lg transition hover:scale-110"
+        >
+          {sound ? <Volume2 /> : <VolumeX />}
+        </button>
+
         <div
           className={`result-card w-full max-w-lg rounded-3xl bg-white p-8 text-center shadow-xl ${
             perfectScore ? "result-success" : "result-failed"
@@ -223,6 +282,17 @@ export default function AnimalQuiz() {
 
   return (
     <div className="quiz-page min-h-screen bg-green-50 p-6">
+      {/* Audio Background */}
+      <audio ref={audioRef} src="/music/BunnyHoop.mp3" preload="auto" />
+
+      {/* Tombol Musik */}
+      <button
+        onClick={toggleSound}
+        className="fixed right-5 top-5 z-50 flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-slate-700 text-white shadow-lg transition hover:scale-110"
+      >
+        {sound ? <Volume2 /> : <VolumeX />}
+      </button>
+
       <div className="mx-auto max-w-2xl rounded-3xl bg-white p-6 shadow-lg">
         {/* Header */}
         <div className="mb-5 flex items-center justify-between">
@@ -310,7 +380,7 @@ export default function AnimalQuiz() {
           )}
         </div>
 
-        {/* ANIMASI FEEDBACK */}
+        {/* Animasi Feedback */}
         {selectedAnswer !== null && (
           <div
             key={String(correct)}

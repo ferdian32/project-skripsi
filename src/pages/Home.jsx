@@ -1,19 +1,30 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import HeaderComponent from "../components/Header";
 import { GlobalProvider } from "../context/GlobalProvider";
 import FooterComponent from "../components/Footer";
+
 const HomePage = () => {
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+
   const { article, setArticle } = useContext(GlobalProvider);
 
+  // Fungsi pencarian
   const handleSearch = (e) => {
     e.preventDefault();
 
-    if (!search.trim()) return;
+    const keyword = search.trim();
 
-    console.log("Pencarian hewan:", search);
+    if (!keyword) {
+      alert("Silakan masukkan kata yang ingin dicari!");
+      return;
+    }
+
+    navigate(`/search/${encodeURIComponent(keyword)}`);
   };
 
+  // Mengambil data artikel
   useEffect(() => {
     const getDataArticle = async () => {
       try {
@@ -73,7 +84,7 @@ const HomePage = () => {
 
             <button
               type="submit"
-              className="bg-amber-400 px-8 py-5 font-bold text-white transition-colors hover:bg-amber-500"
+              className="bg-amber-400 px-8 py-5 font-bold text-white transition-colors hover:bg-amber-500 active:bg-amber-600"
             >
               SEARCH
             </button>
@@ -82,7 +93,7 @@ const HomePage = () => {
       </div>
 
       {/* Article Section */}
-      <div className="mx-auto mt-8 w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto mt-8 w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <h1 className="mb-8 text-center text-2xl font-bold">
           Ilmu Terbaru Hewanpedia
         </h1>
@@ -103,17 +114,21 @@ const HomePage = () => {
                 />
               </div>
 
+              {/* Article Information */}
               <div className="min-w-0 p-4">
                 <h2 className="wrap-break-words text-lg font-semibold text-gray-800">
                   {item.title}
                 </h2>
+
                 <p className="text-gray-500 italic">{item.category}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
-      <FooterComponent></FooterComponent>
+
+      {/* Footer */}
+      <FooterComponent />
     </section>
   );
 };

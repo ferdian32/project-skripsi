@@ -1,10 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Volume2, VolumeX, Settings, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const GamesPage = () => {
   const [sound, setSound] = useState(true);
+  const audioRef = useRef(null);
   const navigate = useNavigate();
+
+  // Auto Play Musik
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    if (audio) {
+      audio.volume = 0.3;
+      audio.loop = true;
+
+      audio.play().catch(() => {
+        // Autoplay mungkin diblokir browser
+        setSound(false);
+      });
+    }
+
+    return () => {
+      if (audio) {
+        audio.pause();
+      }
+    };
+  }, []);
+
+  // Mengaktifkan / Mematikan Musik
+  const toggleSound = () => {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    if (sound) {
+      audio.pause();
+      setSound(false);
+    } else {
+      audio
+        .play()
+        .then(() => setSound(true))
+        .catch((error) => console.log(error));
+    }
+  };
+
   return (
     <section
       className="relative min-h-screen w-full overflow-hidden bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 py-8"
@@ -12,13 +52,16 @@ const GamesPage = () => {
         backgroundImage: "url('/images/bg-games.png')",
       }}
     >
+      {/* Audio Background */}
+      <audio ref={audioRef} src="/music/BunnyHoop.mp3" preload="auto" />
+
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/5" />
 
       {/* Settings */}
       <div className="absolute right-5 top-5 z-20 flex gap-3">
         <button
-          onClick={() => setSound(!sound)}
+          onClick={toggleSound}
           className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-slate-700 text-white shadow-lg transition hover:scale-110"
         >
           {sound ? <Volume2 /> : <VolumeX />}

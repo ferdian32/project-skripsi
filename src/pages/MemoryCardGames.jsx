@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { Volume2, VolumeX } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 
-export default function MemoryCard() {
+function MemoryCardGame() {
   const [cards, setCards] = useState([]);
   const [animals, setAnimals] = useState([]);
   const [opened, setOpened] = useState([]);
@@ -22,7 +23,6 @@ export default function MemoryCard() {
         }
 
         const results = await response.json();
-
         const data = Array.isArray(results) ? results : results.data;
 
         if (!Array.isArray(data)) {
@@ -75,9 +75,7 @@ export default function MemoryCard() {
       // Jika pasangan cocok
       if (firstCard.id_card === secondCard.id_card) {
         setFeedback("match");
-
         setMatched((previous) => [...previous, firstCard.id_card]);
-
         setOpened([]);
 
         setTimeout(() => {
@@ -149,7 +147,6 @@ export default function MemoryCard() {
     return (
       <main className="game-container result-page">
         <div className="memory-result-card">
-          {/* Karakter kemenangan */}
           <div className="memory-result-emoji">🐼🥳</div>
 
           <h1 className="memory-result-title">LUAR BIASA!</h1>
@@ -158,7 +155,6 @@ export default function MemoryCard() {
             Yeay! Kamu berhasil menemukan semua pasangan hewan!
           </p>
 
-          {/* Statistik permainan */}
           <div className="memory-result-stats">
             <div className="memory-stat">
               <span className="memory-stat-icon">🐾</span>
@@ -181,7 +177,6 @@ export default function MemoryCard() {
             🔄 Main Lagi
           </button>
 
-          {/* Confetti */}
           <div className="memory-confetti">
             {["🎉", "✨", "⭐", "🎊", "🌟", "🎈"].map((emoji, index) => (
               <span
@@ -209,7 +204,6 @@ export default function MemoryCard() {
         Temukan dua kartu dengan gambar hewan yang sama!
       </p>
 
-      {/* Informasi permainan */}
       <div className="game-info">
         <p>
           Pasangan: {matched.length} / {animals.length}
@@ -218,7 +212,6 @@ export default function MemoryCard() {
         <p>Percobaan: {moves}</p>
       </div>
 
-      {/* Feedback pasangan */}
       {feedback && (
         <div
           className={`memory-feedback ${
@@ -243,14 +236,12 @@ export default function MemoryCard() {
         </div>
       )}
 
-      {/* Kartu Hewan */}
       <div className="card-grid">
         {cards.map((card) => {
           const isOpen =
             opened.includes(card.cardId) || matched.includes(card.id_card);
 
           const isMatched = matched.includes(card.id_card);
-
           const isMismatch = mismatchCards.includes(card.cardId);
 
           return (
@@ -269,7 +260,6 @@ export default function MemoryCard() {
               {isOpen ? (
                 <>
                   <span className="animal-emoji">{card.emoji}</span>
-
                   <span className="animal-name">{card.name}</span>
                 </>
               ) : (
@@ -280,10 +270,72 @@ export default function MemoryCard() {
         })}
       </div>
 
-      {/* Tombol ulangi */}
       <button className="restart-button" onClick={restartGame}>
         🔄 Ulangi Permainan
       </button>
     </main>
+  );
+}
+
+// Komponen utama dengan musik latar
+export default function MemoryCard() {
+  const audioRef = useRef(null);
+  const [sound, setSound] = useState(false);
+
+  // Autoplay musik
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    audio.volume = 0.3;
+    audio.loop = true;
+
+    audio
+      .play()
+      .then(() => {
+        setSound(true);
+      })
+      .catch(() => {
+        setSound(false);
+      });
+
+    return () => {
+      audio.pause();
+    };
+  }, []);
+
+  // Tombol musik ON/OFF
+  const toggleSound = async () => {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    if (sound) {
+      audio.pause();
+      setSound(false);
+    } else {
+      try {
+        await audio.play();
+        setSound(true);
+      } catch (error) {
+        console.error("Musik gagal diputar:", error);
+      }
+    }
+  };
+
+  return (
+    <>
+      <audio ref={audioRef} src="/music/BunnyHoop.mp3" preload="auto" loop />
+
+      <button
+        onClick={toggleSound}
+        className="fixed right-5 top-5 z-50 flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-slate-700 text-white shadow-lg transition hover:scale-110"
+      >
+        {sound ? <Volume2 /> : <VolumeX />}
+      </button>
+
+      <MemoryCardGame />
+    </>
   );
 }

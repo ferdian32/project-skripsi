@@ -32,6 +32,7 @@ import EditDataMemoryCard from "./pages/admin/CRUD/EditDataMemoryCard.jsx";
 import DetailPage from "./pages/Detail.jsx";
 import LoginAdmin from "./pages/Login.jsx";
 import RegisterAdmin from "./pages/Register.jsx";
+import SearchPage from "./pages/SearchPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
   {
     path: "detail/:slug",
     element: <DetailPage />,
+  },
+  {
+    path: "search/:title",
+    element: <SearchPage />,
   },
   {
     path: "/dashboard",
